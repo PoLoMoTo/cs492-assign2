@@ -11,7 +11,7 @@ RM=rm -f
 CPP = g++
 
 all: $(OBJ)
-	g++ $(OBJ) -o $(NAME) -lpthread
+	g++ $(OBJ) -o $(NAME) -g3
 
 clean:
 	-$(RM) *~
