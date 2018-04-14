@@ -82,26 +82,33 @@ int main(int argc, char const *argv[]){
                     for (int i = 0; i < totalPrograms; i++){
                         if (pageTables.at(i).at(0)[0] <= mainMemory[firstIn] && mainMemory[firstIn] <= pageTables.at(i).at(pageTables.at(i).size() - 1)[0]){
                             pageTables.at(i).at(mainMemory[firstIn] - pageTables.at(i).at(0)[0])[1] = 0;
-                            cout << "YES" << endl;
                             break;
                         }
                     }
                     mainMemory[firstIn] = pageTables.at(pid).at(location/pageSize)[0];
                     pageTables.at(pid).at(location/pageSize)[1] = 1;
-                    firstIn = 511 ? 0 : firstIn + 1;
+                    firstIn = (mainPages-1) ? 0 : firstIn + 1;
                 } else if (algorithm == "LRU"){
                     unsigned long lowest = 0;
-                    int pidpage[2];
-                    for (int i = 0; i < 512; i++){
+                    int pidpage[3]; // PID, Program Page, Main Page
+                    for (int i = 0; i < mainPages && mainMemory[i] != -1; i++){
                         for (int j = 0; j < totalPrograms; j++){
+                            // cout << pageTables.at(j).at(0)[0] << ',' << mainMemory[i] << ',' << pageTables.at(j).at(pageTables.at(j).size() - 1)[0] << endl;
                             if (pageTables.at(j).at(0)[0] <= mainMemory[i] && mainMemory[i] <= pageTables.at(j).at(pageTables.at(j).size() - 1)[0]){
-                                if (i == 0 || pageTables.at(i).at(mainMemory[i] - pageTables.at(i).at(0)[0])[2] < lowest){
-                                    pageTables.at(i).at(mainMemory[i] - pageTables.at(i).at(0)[0])[1] = 0;
+                                if (i == 0 || pageTables.at(j).at(mainMemory[i] - pageTables.at(j).at(0)[0])[2] < lowest){
+                                    lowest = pageTables.at(j).at(mainMemory[i] - pageTables.at(j).at(0)[0])[2];
+                                    pidpage[0] = j;
+                                    pidpage[1] = mainMemory[i] - pageTables.at(j).at(0)[0];
+                                    pidpage[2] = i;
                                 }
                                 break;
                             }
                         }
                     }
+
+                    pageTables.at(pidpage[0]).at(pidpage[1])[1] = 0;
+                    mainMemory[pidpage[2]] = pageTables.at(pid).at(location/pageSize)[0];
+                    pageTables.at(pid).at(location/pageSize)[1] = 1;
                 }
             }
             pageTables.at(pid).at(location/pageSize)[2] = counter;
