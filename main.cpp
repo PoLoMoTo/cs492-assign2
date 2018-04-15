@@ -78,7 +78,15 @@ int main(int argc, char const *argv[]){
             // cout << pid << ", " << location << ", " << (location/pageSize) << endl;
             if (!pageTables.at(pid).at(location/pageSize)[1]){
                 pagefaults++;
-                if (algorithm == "FIFO"){
+                if (mainMemory[mainPages-1] == -1){
+                    for (int i = 0; i < mainPages; i++){
+                        if (mainMemory[i] == -1){
+                            pageTables.at(pid).at(location/pageSize)[1] = 1;
+                            mainMemory[i] = pageTables.at(pid).at(location/pageSize)[0];
+                            break;
+                        }
+                    }
+                } else if (algorithm == "FIFO"){
                     for (int i = 0; i < totalPrograms; i++){
                         if (pageTables.at(i).at(0)[0] <= mainMemory[firstIn] && mainMemory[firstIn] <= pageTables.at(i).at(pageTables.at(i).size() - 1)[0]){
                             pageTables.at(i).at(mainMemory[firstIn] - pageTables.at(i).at(0)[0])[1] = 0;
