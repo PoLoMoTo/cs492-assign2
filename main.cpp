@@ -33,6 +33,8 @@ int main(int argc, char const *argv[]){
     int mainPages = 512/pageSize;
     int mainMemory[mainPages];
     fill_n(mainMemory, mainPages, -1);
+    int Rbit[mainPages];
+    fill_n(Rbit, mainPages, 0);
     vector<vector<array<int, 3>>> pageTables;
     int totalPrograms;
     int totalPages = 0;
@@ -83,6 +85,7 @@ int main(int argc, char const *argv[]){
                         if (mainMemory[i] == -1){
                             pageTables.at(pid).at(location/pageSize)[1] = 1;
                             mainMemory[i] = pageTables.at(pid).at(location/pageSize)[0];
+                            Rbit[i] = 1;
                             break;
                         }
                     }
@@ -113,10 +116,24 @@ int main(int argc, char const *argv[]){
                             }
                         }
                     }
-
                     pageTables.at(pidpage[0]).at(pidpage[1])[1] = 0;
                     mainMemory[pidpage[2]] = pageTables.at(pid).at(location/pageSize)[0];
                     pageTables.at(pid).at(location/pageSize)[1] = 1;
+                } else if (algorithm == "Clock"){
+                    while (Rbit[firstIn] != 0){
+                        Rbit[firstIn] = 0;
+                        firstIn++;
+                    }
+                    Rbit[firstIn] = 1;
+                    for (int i = 0; i < totalPrograms; i++){
+                        if (pageTables.at(i).at(0)[0] <= mainMemory[firstIn] && mainMemory[firstIn] <= pageTables.at(i).at(pageTables.at(i).size() - 1)[0]){
+                            pageTables.at(i).at(mainMemory[firstIn] - pageTables.at(i).at(0)[0])[1] = 0;
+                            break;
+                        }
+                    }
+                    mainMemory[firstIn] = pageTables.at(pid).at(location/pageSize)[0];
+                    pageTables.at(pid).at(location/pageSize)[1] = 1;
+                    firstIn = (mainPages-1) ? 0 : firstIn + 1;
                 }
             }
             pageTables.at(pid).at(location/pageSize)[2] = counter;

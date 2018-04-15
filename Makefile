@@ -11,7 +11,7 @@ RM=rm -f
 CPP = g++
 
 all: $(OBJ)
-	g++ -g $(OBJ) -o $(NAME)
+	g++ -g -O0 -fbuiltin $(OBJ) -o $(NAME)
 
 clean:
 	-$(RM) *~
