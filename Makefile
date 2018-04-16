@@ -31,3 +31,43 @@ fclean: clean
 	-$(RM) $(NAME)
 
 re: fclean all
+
+test: re
+	echo "---------Running all algorithms with demand paging---------" > test.txt
+	echo "---------FIFO---------" >> test.txt
+	./assign2 plist ptrace 1 FIFO - >> test.txt
+	./assign2 plist ptrace 2 FIFO - >> test.txt
+	./assign2 plist ptrace 4 FIFO - >> test.txt
+	./assign2 plist ptrace 8 FIFO - >> test.txt
+	./assign2 plist ptrace 16 FIFO - >> test.txt
+	echo "---------LRU---------" >> test.txt
+	./assign2 plist ptrace 1 LRU - >> test.txt
+	./assign2 plist ptrace 2 LRU - >> test.txt
+	./assign2 plist ptrace 4 LRU - >> test.txt
+	./assign2 plist ptrace 8 LRU - >> test.txt
+	./assign2 plist ptrace 16 LRU - >> test.txt
+	echo "---------Clock---------" >> test.txt
+	./assign2 plist ptrace 1 Clock - >> test.txt
+	./assign2 plist ptrace 2 Clock -  >> test.txt
+	./assign2 plist ptrace 4 Clock - >> test.txt
+	./assign2 plist ptrace 8 Clock - >> test.txt
+	./assign2 plist ptrace 16 Clock - >> test.txt
+	echo "---------Running all algorithms with pre-paging---------" >> test.txt
+	echo "---------FIFO---------" >> test.txt
+	./assign2 plist ptrace 1 FIFO + >> test.txt
+	./assign2 plist ptrace 2 FIFO + >> test.txt
+	./assign2 plist ptrace 4 FIFO + >> test.txt
+	./assign2 plist ptrace 8 FIFO + >> test.txt
+	./assign2 plist ptrace 16 FIFO + >> test.txt
+	echo "---------LRU---------" >> test.txt
+	./assign2 plist ptrace 1 LRU + >> test.txt
+	./assign2 plist ptrace 2 LRU + >> test.txt
+	./assign2 plist ptrace 4 LRU + >> test.txt
+	./assign2 plist ptrace 8 LRU + >> test.txt
+	./assign2 plist ptrace 16 LRU + >> test.txt
+	echo "---------Clock---------" >> test.txt
+	./assign2 plist ptrace 1 Clock + >> test.txt
+	./assign2 plist ptrace 2 Clock + >> test.txt
+	./assign2 plist ptrace 4 Clock + >> test.txt
+	./assign2 plist ptrace 8 Clock + >> test.txt
+	./assign2 plist ptrace 16 Clock + >> test.txt
